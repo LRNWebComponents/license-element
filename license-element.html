@@ -53,11 +53,12 @@ A simple way of applying a semantically accurate license to work.
     </style>
     <meta rel="cc:license" href$="[[licenseLink]]" content$="License: [[licenseName]]">
     <div class="license-body" xmlns:cc$="[[licenseLink]]" xmlns:dc="http://purl.org/dc/elements/1.1/">
-
-      <span rel="dc:type" href="http://purl.org/dc/dcmitype/Text" property="dc:title">[[title]]</span> by <a rel="cc:attributionURL" property="cc:attributionName" href$="[[source]]">[[creator]]</a> is licensed under a <a class="license-link" target="_blank" href="[[licenseLink]]"><img alt="[[licenseName]] graphic" src="[[licenseImage]]" hidden&="[[!licenseImage]]" />[[licenseName]]</a>
-
+      <span rel="dc:type" href="http://purl.org/dc/dcmitype/Text" property="dc:title">[[title]]</span> by <a rel="cc:attributionURL" property="cc:attributionName" href$="[[source]]">[[creator]]</a> is licensed under a <a class="license-link" target="_blank" href="[[licenseLink]]"><img alt="[[licenseName]] graphic" src="[[licenseImage]]" hidden&="[[!licenseImage]]" />[[licenseName]]</a>.
       <span rel="dc:source" href$="[[source]]"></span>
-      Permissions beyond the scope of this license may be available at <a rel="cc:morePermissions" href="[[moreLink]]">[[moreLabel]]</a>.
+
+      <template is="dom-if" if="[[hasMore]]">
+        <span>Permissions beyond the scope of this license are available <a rel="cc:morePermissions" target="_blank" href="[[moreLink]]">[[moreLabel]]</a>.</span>
+      </template>
     </div>
   </template>
 
@@ -89,12 +90,6 @@ A simple way of applying a semantically accurate license to work.
           type: String,
         },
         /**
-         * Date the work was accessed.
-         */
-        date: {
-          type: String,
-        },
-        /**
          * License name, calculated or supplied by the end user if we don't have them.
          */
         licenseName: {
@@ -112,6 +107,26 @@ A simple way of applying a semantically accurate license to work.
         license: {
           type: String,
           observer: '_licenseUpdated',
+        },
+        /**
+         * More details label
+         */
+        moreLabel: {
+          type: String,
+          value: 'on the licensing details page',
+        },
+        /**
+         * More details link
+         */
+        moreLink: {
+          type: String,
+        },
+        /**
+         * See if we have more things to point to
+         */
+        hasMore: {
+          type: Boolean,
+          computed: '_computeHasMore(moreLink)',
         },
       },
       /**
@@ -136,7 +151,6 @@ A simple way of applying a semantically accurate license to work.
                 'title': 'title',
                 'author': 'creator',
                 'license': 'license',
-                'accessDate': 'date'
               },
               {
                 'type': 'inline',
@@ -163,13 +177,6 @@ A simple way of applying a semantically accurate license to work.
                 'inputMethod': 'textfield',
                 'icon': 'link',
                 'validationType': 'url',
-              },
-              {
-                'property': 'date',
-                'title': 'Date accessed',
-                'description': 'The date this was accessed.',
-                'inputMethod': 'textfield',
-                'icon': 'link',
               },
               {
                 'property': 'license',
@@ -204,13 +211,6 @@ A simple way of applying a semantically accurate license to work.
                 'validationType': 'url',
               },
               {
-                'property': 'date',
-                'title': 'Date accessed',
-                'description': 'The date this was accessed.',
-                'inputMethod': 'textfield',
-                'icon': 'link',
-              },
-              {
                 'property': 'license',
                 'title': 'License',
                 'description': 'The source url for the element this is citing.',
@@ -231,6 +231,16 @@ A simple way of applying a semantically accurate license to work.
           }
         };
         this.setHaxProperties(props);
+      },
+      /**
+       * Calculate if we should show the advanced details area
+       */
+      _computeHasMore: function(link) {
+        // only show if there's a link supplied for additional details
+        if (typeof link !== typeof undefined && link !== '') {
+          return true;
+        }
+        return false;
       },
       /**
        * A list of licenses that we support the references for.
