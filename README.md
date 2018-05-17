@@ -9,7 +9,8 @@
 ```
 -->
 ```html
-<license-element></license-element>
+<license-element creator="Bryan Ollendyke" scope="sibling" license="by" title="The btopro blog" source="https://btopro.com/" more-link="https://btopro.com/about" more-label="in my policies section"></license-element>
+
 ```
 
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/LRNWebComponents/license-element)
