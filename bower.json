@@ -1,5 +1,6 @@
 {
   "name": "license-element",
+  "license": "Apache-2.0",
   "description": "A LRN element",
   "main": "license-element.html",
   "dependencies": {
